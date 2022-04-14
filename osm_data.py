@@ -22,8 +22,9 @@ import pandas as pd
 
 from esy.osmfilter import (Node, Relation, Way)  # https://gitlab.com/dlr-ve-esy/esy-osmfilter/-/tree/master/
 from esy.osmfilter import osm_info, osm_pickle, run_filter
-from geofabrik_data import get_continent_country, world_cc
-from geofabrik_download import download_pbf
+from geofabrik_data import get_region_dict, get_short_id, view_regions
+
+from geofabrik_download import geofabrik_downloader
 from osm_data_args import get_args
 from osm_data_config import feature_category, feature_columns
 from shapely.geometry import LineString, Point, Polygon
@@ -49,13 +50,8 @@ feature_list = ["line", "tower"]
 # feature_list = ["substation"]
 
 
-
-
-
 pre_filtered = []
-
-
-def download_and_filter(feature, country_code, update=False, verify=False):
+def download_and_filter(feature, region_id, update=False, verify=False):
     """
     Download OpenStreetMap raw file for selected tag.
 
@@ -81,7 +77,10 @@ def download_and_filter(feature, country_code, update=False, verify=False):
         Nested dictionary with all OpenStreetMap keys of specific component.
         Example of lines. See https://wiki.openstreetmap.org/wiki/Tag:power%3Dline
     """
-    PBF_inputfile = download_pbf(country_code, update, verify)
+    # PBF_inputfile = download_pbf(country_code, update, verify)
+    geofabrik_pbf_url= get_region_dict(region_id)['urls']['pbf']
+    PBF_inputfile = geofabrik_downloader(geofabrik_pbf_url)
+    country_code = get_short_id(region_id)
 
     filter_file_exists = False
     # json file for the Data dictionary
@@ -124,7 +123,7 @@ def download_and_filter(feature, country_code, update=False, verify=False):
         #     Data = json.load(f)
 
 
-        _logger.info(f"Loading {feature} Pickle for {world_cc[country_code]}")
+        _logger.info(f"Loading {feature} Pickle for {country_code}")
         # feature_data = Data, Elements
         # return feature_data
 
@@ -132,11 +131,11 @@ def download_and_filter(feature, country_code, update=False, verify=False):
         create_elements = True
         if country_code not in pre_filtered:  # Ensures pre-filter is not run everytime
             new_prefilter_data = True
-            _logger.info(f"Pre-filtering {world_cc[country_code]} ")
+            _logger.info(f"Pre-filtering {country_code} ")
             pre_filtered.append(country_code)
         else:
             new_prefilter_data = False
-        _logger.info(f"Creating  New {feature} Elements for {world_cc[country_code]}")
+        _logger.info(f"Creating  New {feature} Elements for {country_code}")
 
     prefilter = {
         Node: {"power": feature_list},
@@ -282,9 +281,9 @@ def output_csv_geojson(df_all_feature, columns_feature, feature, cc_list):
     def filenamer(cc_list):
         if len(cc_list) == 1:
             return str(cc_list[0])
-        if len(set([continent for cc in cc_list for continent, country in get_continent_country(cc)]))==1:
-            if set(cc_list) == world_cc[get_continent_country(cc_list[0])].keys():
-                return f"{get_continent_country(cc_list[0])}_all"
+        # if len(set([continent for cc in cc_list for continent, country in get_continent_country(cc)]))==1:
+        #     if set(cc_list) == world_cc[get_continent_country(cc_list[0])].keys():
+        #         return f"{get_continent_country(cc_list[0])}_all"
         
     fn_name = filenamer(cc_list)
     print(fn_name)
@@ -328,9 +327,10 @@ def output_csv_geojson(df_all_feature, columns_feature, feature, cc_list):
     )  # Generate GeoJson
 
 
-def process_country(feature, country_code, update, verify):
-    feature_data = download_and_filter(feature, country_code, update, verify)
+def process_country(feature, region_id, update, verify):
+    feature_data = download_and_filter(feature, region_id, update, verify)
 
+    country_code = get_short_id(region_id)
     df_node, df_way, Data = convert_filtered_data_to_dfs(
         country_code, feature_data, feature
     )
@@ -368,13 +368,19 @@ def process_per_country(cc_list, update, verify):
             df_all_feature = pd.DataFrame()
             df_feature = process_country(feature, country_code, update, verify)
             df_all_feature = pd.concat([df_all_feature, df_feature])
-            output_csv_geojson(df_all_feature, feature_columns[feature], feature, [country_code])
+            output_csv_geojson(df_all_feature, feature_columns[feature], feature, [get_short_id(country_code)])
 
         # output_csv_geojson(df_all_feature, feature_columns[feature], feature, cc_list)
 
 
 if __name__ == "__main__":
     # Set update # Verify = True checks local md5s and pre-filters data again
-    # process_data(update=False, verify=False) 
     # args = get_args()  # TODO: implement parser get arguments from command line
-    process_per_country(["AU"], update=False, verify=False)
+    
+    # How to use:
+    # 1. use view_regions() to view a list of supported region ids
+    # view_regions() # Prints exhaustive list of regions supported by this tool.
+    # 2. set feature_list = ["line", "tower"] (supported features given by feature_category.keys())
+    # 2. copy the names into a list passed into process_per_country
+
+    process_per_country(["us/california"], update=False, verify=False)

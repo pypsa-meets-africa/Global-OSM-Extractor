@@ -242,77 +242,30 @@ world_iso = {
 
 # Based on: https://waml.org/waml-information-bulletin/46-3/index-to-lc-g-schedule/1-world/
 continent_regions = {
-    # Eurpean regions
-    "SCR": ["DK", "NO", "SE", "FI", "IS"],  # SCANDANAVIAN REGION
+    # SCANDANAVIAN REGION
+    "SCR": ["DK", "NO", "SE", "FI", "IS"],  
     # EASTREN EUROPIAN REGION
     "EER": ["BY", "BU", "CZ", "RU", "SK", "UA", "GB", "LT", "LV", "EE"],
     # CENTRAL EUROPIAN REGION
     "CER": ["AT", "CH", "CZ", "DE", "HU", "PL", "SK"],
     # BALKAN PENISULAN REGION
-    "BPR": [
-        "AL",
-        "AN",
-        "BA",
-        "BG",
-        "GR",
-        "HR",
-        "MD",
-        "MT",
-        "RO",
-        "SL",
-        "RS",
-        "ME",
-        "MK",
-    ],
-    "WER": ["FR", "BE", "GB", "IE", "LU", "MC", "NL"],  # WESTREN EUROPE
-    "SER": ["ES", "IT", "PT"],  # SOUTHERN EUROPAIN REGION
+    "BPR": ["AL","AN","BA","BG","GR","HR","MD","MT","RO","SL","RS","ME","MK"],
+    # WESTREN EUROPE
+    "WER": ["FR", "BE", "GB", "IE", "LU", "MC", "NL"],
+    # SOUTHERN EUROPAIN REGION
+    "SER": ["ES", "IT", "PT"],  
     # African regions
     "NAR": ["EG", "DZ", "LY", "MA", "SD", "SS"],  # NORTHERN AFRICAN REGION
     # WESTREN AFRICAN REGION
-    "WAR": [
-        "MR",
-        "ML",
-        "NE",
-        "NG",
-        "BJ",
-        "BF",
-        "TG",
-        "GH",
-        "CI",
-        "LR",
-        "SL",
-        "GN",
-        "GM",
-        "SL",
-    ],
+    "WAR": ["MR","ML","NE","NG","BJ","BF","TG","GH","CI","LR","SL","GN","GM","SL",],
     # CENTRAL AFRICAN REGION
     "CAR": ["TD", "CF", "CM", "GQ", "GA", "CD", "CG", "AO"],
     # EASTREN AFRICAN REGION
     "EAR": ["ET", "UG", "KE", "RW", "BI", "TZ", "MZ", "DJ", "MG"],
     # SOUTHERN AFRICAN REGION
     "SAR": ["MW", "ZM", "ZW", "BW", "NA", "SZ", "LS", "ZA"],
-    # Asian regions
-    "WAS": [
-        "TR",  # TURKEY
-        "AM",  # ARMENIA
-        "AZ",  # AZERBAIJAN
-        "BH",  # BAHREIN
-        "CY",  # CYPRUS (NORTH AND SOUTH)
-        "GE",  # GEORGIA
-        "IQ",  # IRAQ
-        "IL-PL",  # ISRAEL AND PALESTINE
-        "JO",  # JORDAN
-        "KW",  # KUWAIT
-        "LB",  # LEBANON
-        "OM",  # OMAN
-        "PS",  # PALESTINE
-        "QA",  # QATAR
-        "SA",  # SAUDI ARABIA
-        "SY",  # SYRIA
-        "AE",  # UNITED ARAB EMIRATES
-        "YE",
-        # XNC is missing for nothern cyprus
-    ],  # YEMEN
+    # Asian regions (XNC is missing for nothern cyprus)
+    "WAS": ["TR","AM","AZ","BH","CY","GE","IQ","IL-PL","JO","KW","LB","OM","PS","QA","SA","SY","AE","YE"],
     # FAR EASTREN AISIAN REGION
     "FEAR": ["JP", "KP", "KR", "CN", "TW", "CN", "MN"],
     # SOUTHEASTREN AISIAN REGION
