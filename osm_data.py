@@ -35,13 +35,12 @@ import logging
 # logging.basicConfig()
 _logger = logging.getLogger("osm_data_extractor")
 _logger.setLevel(logging.INFO)
-# logger.setLevel(logging.WARNING)
+# _logger.setLevel(logging.WARNING)
 
 os.chdir(
     os.path.dirname(os.path.abspath(__file__))
 )  # move up to root directory
 
-# Downloads PBF File for given Country Code
 
 feature_list = ["line", "tower"]
 # feature_list = ["substation", "line", "generator", "cable"]
@@ -286,7 +285,6 @@ def output_csv_geojson(df_all_feature, columns_feature, feature, cc_list):
         #         return f"{get_continent_country(cc_list[0])}_all"
         
     fn_name = filenamer(cc_list)
-    print(fn_name)
     outputfile_partial = os.path.join(
         os.getcwd(), "data", "raw", fn_name + "_raw"
     )  # Output file directory
@@ -296,9 +294,9 @@ def output_csv_geojson(df_all_feature, columns_feature, feature, cc_list):
             os.path.dirname(outputfile_partial), exist_ok=True
         )  # create raw directory
 
-    df_all_feature = df_all_feature[
-        df_all_feature.columns.intersection(set(columns_feature))
-    ]
+    # df_all_feature = df_all_feature[
+    #     df_all_feature.columns.intersection(set(columns_feature))
+    # ]
     df_all_feature.reset_index(drop=True, inplace=True)
 
     # Generate Files
@@ -379,8 +377,8 @@ if __name__ == "__main__":
     
     # How to use:
     # 1. use view_regions() to view a list of supported region ids
-    # view_regions() # Prints exhaustive list of regions supported by this tool.
+    view_regions() # Prints exhaustive list of regions supported by this tool.
     # 2. set feature_list = ["line", "tower"] (supported features given by feature_category.keys())
     # 2. copy the names into a list passed into process_per_country
-
-    process_per_country(["us/california"], update=False, verify=False)
+    # process_per_country(["us/california"], update=False, verify=False)
+    # process_per_country(['australia', 'bangladesh', 'chad', 'congo-democratic-republic', 'ghana', 'malawi','sierra-leone', 'us/california', 'us/texas', 'brazil'], update=False, verify=False)
